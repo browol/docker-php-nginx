@@ -4,7 +4,7 @@ LABEL Maintainer="Kittipol <kittipol@digio.co.th>"
 # Install packages
 RUN apk --no-cache add php7 php7-fpm php7-mysqli php7-json php7-openssl php7-curl \
     php7-zlib php7-xml php7-phar php7-intl php7-dom php7-xmlreader php7-ctype php7-session \
-    php7-mbstring php7-gd php7-pdo php7-pdo_mysql php7-soap php7-tokenizer nginx supervisor curl
+    php7-mbstring php7-gd php7-pdo php7-pdo_mysql php7-soap php7-tokenizer php7-common php7-zip nginx supervisor curl
 
 # ensure www-data user exists
 RUN set -x ; \
@@ -42,12 +42,7 @@ USER www-data
 WORKDIR /var/www/html
 COPY --chown=www-data:www-data src/ /var/www/html/
 
-RUN chown -R www-data:www-data /var/www/html/storage/*  && \
-  chown -R www-data:www-data /var/www/html/storage && \
-  chmod 775 /var/www/html/storage && \
-  chmod 775 /var/www/html/storage/* && \
-  rm -rf /var/www/html/storage/logs/* && \
-  rm -rf /var/www/html/storage/request_logs/*
+RUN [ -d "/var/www/html/storage" ] && (chown -R www-data:www-data /var/www/html/storage/* && chmod -R 775 /var/www/html/storage/*) || echo "not found directory at path /var/www/html/storage"
 
 # Expose the port nginx is reachable on
 EXPOSE 8080
