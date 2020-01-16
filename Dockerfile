@@ -1,10 +1,10 @@
-FROM alpine:3.10
+FROM alpine:3.7
 LABEL Maintainer="Kittipol <kittipol@digio.co.th>"
 
 # Install packages
-RUN apk --no-cache add php7 php7-fpm php7-mysqli php7-json php7-openssl php7-curl \
-    php7-zlib php7-xml php7-phar php7-intl php7-dom php7-xmlreader php7-ctype php7-session \
-    php7-mbstring php7-gd php7-pdo php7-pdo_mysql php7-soap php7-tokenizer php7-simplexml php7-common php7-zip php7-xmlrpc nginx supervisor curl
+RUN apk --no-cache add php5 php5-fpm php5-mysqli php5-json php5-openssl php5-curl \
+    php5-zlib php5-xml php5-phar php5-intl php5-dom php5-xmlreader php5-ctype \
+    php5-cli php5-gd php5-pdo php5-pdo_mysql php5-soap php5-common php5-zip php5-xmlrpc nginx supervisor curl
 
 # ensure www-data user exists
 RUN set -x ; \
@@ -13,12 +13,12 @@ RUN set -x ; \
 
 # Configure nginx
 COPY config/nginx.conf /etc/nginx/nginx.conf
+
 # Remove default server definition
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Configure PHP-FPM
-COPY config/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
-COPY config/php.ini /etc/php7/conf.d/php.ini
+COPY config/www.conf /etc/php5/fpm.d/www.conf
 
 # Configure supervisord
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -28,6 +28,10 @@ RUN chown -R www-data:www-data /run && \
   chown -R www-data:www-data /var/lib/nginx && \
   chown -R www-data:www-data /var/tmp/nginx && \
   chown -R www-data:www-data /var/log/nginx
+
+# Create PHP-FPM Logging file
+RUN touch /var/log/php-fpm.log && \
+    chown www-data:www-data /var/log/php-fpm.log
 
 # Setup document root
 RUN mkdir -p /var/www/html
