@@ -3,7 +3,7 @@ LABEL Maintainer="Kittipol <kittipol@digio.co.th>"
 
 # Install packages
 RUN apk --no-cache add php7 php7-fpm php7-mysqli php7-json php7-openssl php7-curl \
-    php7-zlib php7-xml php7-phar php7-intl php7-dom php7-xmlreader php7-ctype php7-session \
+    php7-zlib php7-xml php7-xmlwriter php7-phar php7-intl php7-dom php7-xmlreader php7-ctype php7-session \
     php7-mbstring php7-gd php7-pdo php7-pdo_mysql php7-soap php7-tokenizer php7-simplexml php7-common php7-zip php7-xmlrpc nginx supervisor curl
 
 # ensure www-data user exists
@@ -18,7 +18,6 @@ RUN rm /etc/nginx/conf.d/default.conf
 
 # Configure PHP-FPM
 COPY config/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
-COPY config/php.ini /etc/php7/conf.d/php.ini
 
 # Configure supervisord
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -38,13 +37,8 @@ VOLUME /var/www/html
 # Switch to use a non-root user from here on
 USER www-data
 
-# Add application
+# Set default directory
 WORKDIR /var/www/html
-COPY --chown=www-data:www-data src/ /var/www/html/
-
-RUN [ -d "/var/www/html/storage" ] \
-    && (chown -R www-data:www-data /var/www/html/storage/* && chmod -R 775 /var/www/html/storage/*) \
-    || echo "not found directory at path /var/www/html/storage"
 
 # Expose the port nginx is reachable on
 EXPOSE 8080
