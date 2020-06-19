@@ -12,8 +12,10 @@ docker build -t kittipol/phpfpm-nginx:release-v1.0 .
 
 ### Run image
 
+expose port 9000 to host network.
+
 ``` bash
-docker run --rm -it -p 9000:8080 --name=phprelease kittipol/phpfpm-nginx:release-v1.0
+docker run -d -it -p 9000:8080 --name=phprelease kittipol/phpfpm-nginx:release-v1.0
 ```
 
 ### Remote into container
@@ -26,12 +28,6 @@ docker exec -it phprelease /bin/ash
 
 ``` bash
 docker stop phprelease; docker rm phprelease
-```
-
-### Copy file from container
-
-``` bash
-docker cp laravel73:/etc/php5/php-fpm.conf ./config/php-fpm.conf
 ```
 
 ### Curl test
