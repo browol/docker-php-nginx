@@ -5,7 +5,7 @@ docker build -t kittipol/phpfpm-nginx:release-v1.0 .
 
 # run image
 
-docker run --rm -it -p 9000:8080 --name=phprelease kittipol/phpfpm-nginx:release-v1.0
+docker run -d -it -p 9000:8080 --name=phprelease kittipol/phpfpm-nginx:release-v1.0
 
 
 # remote into container
@@ -16,11 +16,6 @@ docker exec -it phprelease /bin/ash
 # destroy container
 
 docker stop phprelease; docker rm phprelease
-
-
-# copy file from container
-
-docker cp laravel73:/etc/php5/php-fpm.conf ./config/php-fpm.conf
 
 
 # curl test
