@@ -13,6 +13,7 @@ RUN set -x ; \
 
 # Configure nginx
 COPY config/nginx.conf /etc/nginx/nginx.conf
+
 # Remove default server definition
 RUN rm /etc/nginx/conf.d/default.conf
 
@@ -22,17 +23,21 @@ COPY config/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
 # Configure supervisord
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Make sure files/folders needed by the processes are accessable when they run under the www-data user
-RUN chown -R www-data:www-data /run && \
-  chown -R www-data:www-data /var/lib/nginx && \
-  chown -R www-data:www-data /var/tmp/nginx && \
-  chown -R www-data:www-data /var/log/nginx
-
 # Setup document root
 RUN mkdir -p /var/www/html
 
 # Make the document root a volume
 VOLUME /var/www/html
+
+# Configure source code
+COPY --chown=www-data src/ /var/www/html
+
+# Make sure files/folders needed by the processes are accessable when they run under the www-data user
+RUN chown -R www-data:www-data /run && \
+  chown -R www-data:www-data /var/lib/nginx && \
+  chown -R www-data:www-data /var/tmp/nginx && \
+  chown -R www-data:www-data /var/log/nginx && \
+  chown -R www-data:www-data /var/www/html
 
 # Switch to use a non-root user from here on
 USER www-data
