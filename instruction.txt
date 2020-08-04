@@ -1,24 +1,31 @@
 # build image
 
-docker build -t kittipol/phpfpm-nginx:release-v1.0 .
+docker build -t kittipol/baac-api:0c2f49a3 .
 
 
 # run image
 
-docker run -d -it -p 9000:8080 --name=phprelease kittipol/phpfpm-nginx:release-v1.0
+docker run -d -it -p 7800:8080 --name=baac-api kittipol/baac-api:0c2f49a3
 
 
 # remote into container
 
-docker exec -it phprelease /bin/ash
+docker exec -it baac-api /bin/ash
 
 
 # destroy container
 
-docker stop phprelease; docker rm phprelease
+docker stop baac-api; docker rm baac-api
 
 
 # curl test
 
-curl -I localhost:9000
+curl -I localhost:7800
 
+# image export
+
+docker save > kittipol-baac-api-0c2f49a3.tar
+
+# load image
+
+docker load < kittipol-baac-api-0c2f49a3.tar
