@@ -1,16 +1,16 @@
 # build image
 
-docker build -t kittipol/baac-api:0c2f49a3 .
+docker build -t kittipol/baac-api:df9a7a61 .
 
 
 # run image
 
-docker run -d -it -p 7800:8080 --name=baac-api kittipol/baac-api:0c2f49a3
+docker run -d -it -p 7800:8080 --name=baac-api kittipol/baac-api:df9a7a61
 
 
 # remote into container
 
-docker exec -it baac-api /bin/ash
+docker exec -it baac-api /bin/sh
 
 
 # destroy container
@@ -22,10 +22,12 @@ docker stop baac-api; docker rm baac-api
 
 curl -I localhost:7800
 
+
 # image export
 
-docker save > kittipol-baac-api-0c2f49a3.tar
+docker save kittipol/baac-api:df9a7a61 > ./images/kittipol-baac-api-df9a7a61.tar
+
 
 # load image
 
-docker load < kittipol-baac-api-0c2f49a3.tar
+docker load < kittipol-baac-api-df9a7a61.tar
