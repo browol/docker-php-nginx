@@ -1,11 +1,11 @@
 # build image
 
-docker build -t kittipol/baac-api:df9a7a61 .
+docker build -t kittipol/baac-api:$(git --git-dir ./src/.git rev-parse --short HEAD) .
 
 
 # run image
 
-docker run -d -it -p 7800:8080 --name=baac-api kittipol/baac-api:df9a7a61
+docker run -d -it -p 7800:8080 --name=baac-api kittipol/baac-api:$(git --git-dir ./src/.git rev-parse --short HEAD)
 
 
 # remote into container
@@ -25,9 +25,9 @@ curl -I localhost:7800
 
 # image export
 
-docker save kittipol/baac-api:df9a7a61 > ./images/kittipol-baac-api-df9a7a61.tar
+docker save kittipol/baac-api:$(git --git-dir ./src/.git rev-parse --short HEAD) > ./images/kittipol-baac-api-$(git --git-dir ./src/.git rev-parse --short HEAD).tar
 
 
 # load image
 
-docker load < kittipol-baac-api-df9a7a61.tar
+docker load < kittipol-baac-api-$(git --git-dir ./src/.git rev-parse --short HEAD).tar
