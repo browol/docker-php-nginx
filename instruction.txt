@@ -31,3 +31,9 @@ docker save kittipol/baac-api:$(git --git-dir ./src/.git rev-parse --short HEAD)
 # load image
 
 docker load < kittipol-baac-api-$(git --git-dir ./src/.git rev-parse --short HEAD).tar
+
+# one step update
+
+docker build -t kittipol/baac-api:$(git --git-dir ./src/.git rev-parse --short HEAD) . && \
+docker stop baac-api; docker rm baac-api && \
+docker run -d -it -p 7800:8080 --name=baac-api kittipol/baac-api:$(git --git-dir ./src/.git rev-parse --short HEAD)
