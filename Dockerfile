@@ -12,21 +12,16 @@ RUN set -x ; \
   addgroup -g 82 -S www-data ; \
   adduser -u 82 -D -S -G www-data www-data && exit 0 ; exit 1
 
-# Configure nginx
+# Add Configure nginx file
 COPY config/nginx.conf /etc/nginx/nginx.conf
-
-# Configure crontab
-COPY config/crontab.txt /home/www-data/crontab.txt
-
-RUN crontab -u www-data /home/www-data/crontab.txt && crontab -u www-data -l
 
 # Remove default server definition
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Configure PHP-FPM
+# Replace default Configure PHP-FPM
 COPY config/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
 
-# Configure supervisord
+# Add Configure supervisord
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Setup document root
